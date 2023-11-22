@@ -4,6 +4,10 @@ import mongoose from 'mongoose';
 import { config } from './config/config';
 import Logging from './library/logging';
 import courses from './routes/Courses';
+import students from './routes/Students';
+import teachers from './routes/Teachers';
+import rooms from './routes/Rooms';
+import schedule from './routes/Schedule';
 
 const router = express();
 
@@ -59,6 +63,10 @@ const StartServer = () => {
 
     //routes
     router.use('/Courses', courses);
+    router.use('/Students', students);
+    router.use('/Teachers', teachers);
+    router.use('/Rooms', rooms);
+    router.use('/Schedule', schedule);
 
 
     //error handling
