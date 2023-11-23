@@ -8,6 +8,7 @@ import students from './routes/Students';
 import teachers from './routes/Teachers';
 import rooms from './routes/Rooms';
 import schedule from './routes/Schedule';
+import users from './routes/Users'
 
 const router = express();
 
@@ -67,6 +68,7 @@ const StartServer = () => {
     router.use('/Teachers', teachers);
     router.use('/Rooms', rooms);
     router.use('/Schedule', schedule);
+    router.use('/Users', users);
 
 
     //error handling
