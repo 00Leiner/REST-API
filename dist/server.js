@@ -8,25 +8,32 @@ const http_1 = __importDefault(require("http"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = require("./config/config");
 const logging_1 = __importDefault(require("./library/logging"));
+const Courses_1 = __importDefault(require("./routes/Courses"));
+const Students_1 = __importDefault(require("./routes/Students"));
+const Teachers_1 = __importDefault(require("./routes/Teachers"));
+const Rooms_1 = __importDefault(require("./routes/Rooms"));
+const Schedule_1 = __importDefault(require("./routes/Schedule"));
+const Users_1 = __importDefault(require("./routes/Users"));
 const router = (0, express_1.default)();
 //connection
 mongoose_1.default
     .connect(config_1.config.mongo.url, { retryWrites: true, w: 'majority' })
     .then(() => {
     logging_1.default.info('Connected To mongoDB');
+    StartServer();
 })
     .catch((error) => {
     logging_1.default.error('Unable to connect');
     logging_1.default.error(error);
 });
-// information if mongodb is connected
+// information if connection started
 const StartServer = () => {
     try {
         router.use((req, res, next) => {
             //request
             logging_1.default.info(`Incomming -> Method: [${req.method}] - Url: [${req.url} - IP [${req.socket.remoteAddress}]]`);
             //response
-            res.on("finish", () => {
+            res.on('finish', () => {
                 logging_1.default.info(`Incomming -> Method: [${req.method}] - Url: [${req.url} - IP [${req.socket.remoteAddress}] - Status: [${res.statusCode}]]`);
             });
             next();
@@ -44,8 +51,12 @@ const StartServer = () => {
             next();
         });
         //routes
-        //check
-        router.get('/ping', (req, res, next) => res.status(200).json({ message: 'pong' }));
+        router.use('/Courses', Courses_1.default);
+        router.use('/Students', Students_1.default);
+        router.use('/Teachers', Teachers_1.default);
+        router.use('/Rooms', Rooms_1.default);
+        router.use('/Schedule', Schedule_1.default);
+        router.use('/Users', Users_1.default);
         //error handling
         router.use((req, res, next) => {
             const error = new Error('not found');
