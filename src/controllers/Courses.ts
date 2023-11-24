@@ -4,14 +4,14 @@ import mongoose from "mongoose";
 
 export async function createCourse(req: Request, res: Response){
   try {
-    const { code, description, units, labOrLec } = req.body;
+    const { code, description, units, type } = req.body;
     
     const courses = new Courses({
       _id: new mongoose.Types.ObjectId(),
       code, 
       description, 
       units,
-      labOrLec
+      type
     });
 
     const savedCourse = await courses.save();
