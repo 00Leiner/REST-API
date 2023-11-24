@@ -30,6 +30,6 @@ const CoursesSchema = new mongoose_1.Schema({
     code: { type: String, required: true },
     description: { type: String, required: true },
     units: { type: String, required: true },
-    labOrLec: { type: String, required: true }
+    type: { type: String, required: true }
 });
 exports.default = mongoose_1.default.model('Courses', CoursesSchema);

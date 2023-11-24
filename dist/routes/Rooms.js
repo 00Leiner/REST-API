@@ -9,6 +9,6 @@ const router = express_1.default.Router();
 router.post('/create', Rooms_1.createRoom);
 router.get('/get/:roomID', Rooms_1.readRoom);
 router.get('/get/', Rooms_1.readAllRooms);
-router.patch('/update/:roomID', Rooms_1.updateRoom);
+router.put('/update/:roomID', Rooms_1.updateRoom);
 router.delete('/delete/:roomID', Rooms_1.deleteRoom);
 exports.default = router;

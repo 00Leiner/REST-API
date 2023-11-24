@@ -18,13 +18,13 @@ const mongoose_1 = __importDefault(require("mongoose"));
 function createCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { code, description, units, labOrLec } = req.body;
+            const { code, description, units, type } = req.body;
             const courses = new Courses_1.default({
                 _id: new mongoose_1.default.Types.ObjectId(),
                 code,
                 description,
                 units,
-                labOrLec
+                type
             });
             const savedCourse = yield courses.save();
             res.status(201).json({ courses: savedCourse });

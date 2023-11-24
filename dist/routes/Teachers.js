@@ -9,6 +9,6 @@ const router = express_1.default.Router();
 router.post('/create', Teachers_1.createTeacher);
 router.get('/get/:teacherID', Teachers_1.readTeacher);
 router.get('/get/', Teachers_1.readAllTeachers);
-router.patch('/update/:teacherID', Teachers_1.updateTeacher);
+router.put('/update/:teacherID', Teachers_1.updateTeacher);
 router.delete('/delete/:teacherID', Teachers_1.deleteTeacher);
 exports.default = router;
