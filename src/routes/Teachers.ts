@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/create', createTeacher);
 router.get('/get/:teacherID', readTeacher);
 router.get('/get/', readAllTeachers);
-router.patch('/update/:teacherID', updateTeacher);
+router.put('/update/:teacherID', updateTeacher);
 router.delete('/delete/:teacherID', deleteTeacher);
 
 export default router;

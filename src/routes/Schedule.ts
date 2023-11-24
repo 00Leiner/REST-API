@@ -7,9 +7,9 @@ const router = express.Router();
 router.post('/create', createSched);
 router.get('/get/:scheduleID', readSched);
 router.get('/get/', readAllSchedule);
-router.patch('/update/:scheduleID', updateSched);
+router.put('/update/:scheduleID', updateSched);
 router.delete('/delete/:scheduleID', deleteSched);
-router.patch('/update/student/:scheduleID/Schedule/:scheduleIDToUpdate', updateScheduleItem);
+router.put('/update/student/:scheduleID/Schedule/:scheduleIDToUpdate', updateScheduleItem);
 router.delete('/delete/student/:scheduleID/Schedule/:scheduleIDToDelete', deleteScheduleItem);
 router.post('/add/schedule/:scheduleID', addScheduleItem);
 
