@@ -9,8 +9,8 @@ router.get('/get/:studentID', readStudent);
 router.get('/get/', readAllStudents);
 router.put('/update/:studentID', updateStudent);
 router.delete('/delete/:studentID', deleteStudent);
-router.put('/update/student/:studentID/course/:courseIDToUpdate', updateCourse);
-router.delete('/delete/student/:studentID/course/:courseIDToDelete', deleteCourse);
+router.put('/update/:studentID/:courseIDToUpdate', updateCourse);
+router.delete('/delete/:studentID/:courseIDToDelete', deleteCourse);
 router.post('/add/course/:studentID', addCourseToStudent);
 
 export default router;
