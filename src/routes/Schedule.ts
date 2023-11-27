@@ -9,8 +9,8 @@ router.get('/get/:scheduleID', readSched);
 router.get('/get/', readAllSchedule);
 router.put('/update/:scheduleID', updateSched);
 router.delete('/delete/:scheduleID', deleteSched);
-router.put('/update/student/:scheduleID/Schedule/:scheduleIDToUpdate', updateScheduleItem);
-router.delete('/delete/student/:scheduleID/Schedule/:scheduleIDToDelete', deleteScheduleItem);
+router.put('/update/:scheduleID/:scheduleIDToUpdate', updateScheduleItem);
+router.delete('/delete/:scheduleID/:scheduleIDToDelete', deleteScheduleItem);
 router.post('/add/schedule/:scheduleID', addScheduleItem);
 
 export default router;
