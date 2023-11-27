@@ -5,9 +5,9 @@ import { createCourse, readCourse, readAllCourses, updateCourse, deleteCourse } 
 const router = express.Router();
 
 router.post('/create', createCourse);
-router.get('/get/:studentID', readCourse);
+router.get('/get/:courseID', readCourse);
 router.get('/get/', readAllCourses);
-router.put('/update/:studentID', updateCourse);
-router.delete('/delete/:studentID', deleteCourse);
+router.put('/update/:courseID', updateCourse);
+router.delete('/delete/:courseID', deleteCourse);
 
 export default router;
