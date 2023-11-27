@@ -9,8 +9,7 @@ export async function createTeacher(req: Request, res: Response) {
     const teacher = new Teachers({
       _id: new mongoose.Types.ObjectId(),
       name,
-      specialized,
-      preferred,
+      specialized
     });
 
     const savedTeacher = await teacher.save();
