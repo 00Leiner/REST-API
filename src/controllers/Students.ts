@@ -82,19 +82,18 @@ export async function deleteStudent(req: Request, res: Response) {
     }
   };
   
-  
-export async function addCourseToStudent(req: Request, res: Response) {
+export async function addCourse(req: Request, res: Response) {
   try {
     const studentID = req.params.studentID;
 
-    const { code, description, units, labOrLec } = req.body;
+    const { code, description, units, type } = req.body;
 
     const newCourse = {
       _id: new Types.ObjectId(),
       code,
       description,
       units,
-      labOrLec
+      type
     };
 
     const updatedStudent = await Students.findByIdAndUpdate(
@@ -117,7 +116,7 @@ export async function addCourseToStudent(req: Request, res: Response) {
 export async function updateCourse(req: Request, res: Response) {
   try {
     const studentID = req.params.studentID;
-    const courseIDToUpdate = req.params.courseIDToUpdate;
+    const courseIDToUpdate = req.params.courseID;
 
     const updatedCourseData  = req.body;
 
@@ -128,7 +127,7 @@ export async function updateCourse(req: Request, res: Response) {
           'courses.$.code': updatedCourseData.code,
           'courses.$.description': updatedCourseData.description,
           'courses.$.units': updatedCourseData.units,
-          'courses.$.labOrLec': updatedCourseData.labOrLec,
+          'courses.$.type': updatedCourseData.type,
         },
       },
       { new: true }
@@ -148,7 +147,7 @@ export async function updateCourse(req: Request, res: Response) {
 export async function deleteCourse(req: Request, res: Response) {
   try {
     const studentID = req.params.studentID;
-    const courseIDToDelete = req.params.courseIDToDelete;
+    const courseIDToDelete = req.params.courseID;
 
     const updatedStudent = await Students.findByIdAndUpdate(
       studentID,

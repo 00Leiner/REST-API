@@ -11,7 +11,7 @@ export interface IStudents  extends Document {
         code: string;
         description: string;
         units: string;
-        labOrLec: string;
+        type: string;
       },
     ];
   };
@@ -27,7 +27,7 @@ const StudentsSchema : Schema = new Schema({
           code: { type: String, required: true },
           description: { type: String, required: true },
           units: { type: String, required: true },
-          labOrLec: { type: String, required: true },
+          type: { type: String, required: true },
         },
       ],
   });
