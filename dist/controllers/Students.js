@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCourse = exports.updateCourse = exports.addCourseToStudent = exports.deleteStudent = exports.updateStudent = exports.readAllStudents = exports.readStudent = exports.createStudent = void 0;
+exports.readCourse = exports.readAllCourse = exports.deleteCourse = exports.updateCourse = exports.addCourse = exports.deleteStudent = exports.updateStudent = exports.readAllStudents = exports.readStudent = exports.createStudent = void 0;
 const Students_1 = __importDefault(require("../models/Students"));
 const mongoose_1 = __importStar(require("mongoose"));
 function createStudent(req, res) {
@@ -130,17 +130,17 @@ function deleteStudent(req, res) {
 }
 exports.deleteStudent = deleteStudent;
 ;
-function addCourseToStudent(req, res) {
+function addCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const studentID = req.params.studentID;
-            const { code, description, units, labOrLec } = req.body;
+            const { code, description, units, type } = req.body;
             const newCourse = {
                 _id: new mongoose_1.Types.ObjectId(),
                 code,
                 description,
                 units,
-                labOrLec
+                type
             };
             const updatedStudent = yield Students_1.default.findByIdAndUpdate(studentID, { $push: { courses: newCourse } }, { new: true });
             if (updatedStudent) {
@@ -156,23 +156,23 @@ function addCourseToStudent(req, res) {
         }
     });
 }
-exports.addCourseToStudent = addCourseToStudent;
+exports.addCourse = addCourse;
 function updateCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const studentID = req.params.studentID;
-            const courseIDToUpdate = req.params.courseIDToUpdate;
+            const courseIDToUpdate = req.params.courseID;
             const updatedCourseData = req.body;
             const updatedStudent = yield Students_1.default.findOneAndUpdate({ _id: studentID, 'courses._id': courseIDToUpdate }, {
                 $set: {
                     'courses.$.code': updatedCourseData.code,
                     'courses.$.description': updatedCourseData.description,
                     'courses.$.units': updatedCourseData.units,
-                    'courses.$.labOrLec': updatedCourseData.labOrLec,
+                    'courses.$.type': updatedCourseData.type,
                 },
             }, { new: true });
             if (updatedStudent) {
-                res.status(200).json({ student: updatedStudent });
+                res.status(200).json({ courses: updatedStudent.courses });
             }
             else {
                 res.status(404).json({ message: 'Student or course not found' });
@@ -189,12 +189,12 @@ function deleteCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const studentID = req.params.studentID;
-            const courseIDToDelete = req.params.courseIDToDelete;
+            const courseIDToDelete = req.params.courseID;
             const updatedStudent = yield Students_1.default.findByIdAndUpdate(studentID, {
                 $pull: { courses: { _id: new mongoose_1.Types.ObjectId(courseIDToDelete) } },
             }, { new: true });
             if (updatedStudent) {
-                res.status(200).json({ student: updatedStudent });
+                res.status(200).json({ courses: updatedStudent.courses });
             }
             else {
                 res.status(404).json({ message: 'Student not found' });
@@ -207,3 +207,46 @@ function deleteCourse(req, res) {
     });
 }
 exports.deleteCourse = deleteCourse;
+function readAllCourse(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const studentID = req.params.studentID;
+            const student = yield Students_1.default.findById(studentID).select('-__v');
+            if (student) {
+                res.status(200).json({ courses: student.courses });
+            }
+            else {
+                res.status(404).json({ message: 'Student not found' });
+            }
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+}
+exports.readAllCourse = readAllCourse;
+function readCourse(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const studentID = req.params.studentID;
+            const courseID = req.params.courseID;
+            const student = yield Students_1.default.findOne({ _id: studentID }).select('-__v');
+            if (student) {
+                const course = yield student.courses.find((course) => course._id === courseID);
+                if (course) {
+                    res.status(200).json({ course });
+                }
+                else {
+                    res.status(404).json({ message: 'Course not found for the given courseID' });
+                }
+            }
+            else {
+                res.status(404).json({ message: 'Student not found' });
+            }
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+}
+exports.readCourse = readCourse;

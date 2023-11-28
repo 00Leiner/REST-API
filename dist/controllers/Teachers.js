@@ -22,8 +22,7 @@ function createTeacher(req, res) {
             const teacher = new Teachers_1.default({
                 _id: new mongoose_1.default.Types.ObjectId(),
                 name,
-                specialized,
-                preferred,
+                specialized
             });
             const savedTeacher = yield teacher.save();
             res.status(201).json({ teacher: savedTeacher });

@@ -29,7 +29,7 @@ export async function readStudent(req: Request, res: Response) {
       const studentID = req.params.studentID;
       const student = await Students.findById(studentID).select('-__v');
         
-      student 
+      student
         ? res.status(200).json({ student }) 
         : res.status(404).json({ message: "Not found" });
         
@@ -130,11 +130,11 @@ export async function updateCourse(req: Request, res: Response) {
           'courses.$.type': updatedCourseData.type,
         },
       },
-      { new: true }
+      { new: true}
     );
 
     if (updatedStudent) {
-      res.status(200).json({ student: updatedStudent });
+      res.status(200).json({ courses: updatedStudent.courses });
     } else {
       res.status(404).json({ message: 'Student or course not found' });
     }
@@ -158,7 +158,7 @@ export async function deleteCourse(req: Request, res: Response) {
     );
 
     if (updatedStudent) {
-      res.status(200).json({ student: updatedStudent });
+      res.status(200).json({ courses: updatedStudent.courses });
     } else {
       res.status(404).json({ message: 'Student not found' });
     }
@@ -168,6 +168,40 @@ export async function deleteCourse(req: Request, res: Response) {
     }
 }
 
+export async function readAllCourse(req: Request, res: Response) {
+  try {
+    const studentID = req.params.studentID;
+    const student = await Students.findById(studentID).select('-__v');
 
-  
-  
+    if (student) {
+      res.status(200).json({ courses: student.courses });
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function readCourse(req: Request, res: Response) {
+  try {
+    const studentID = req.params.studentID;
+    const courseID = req.params.courseID;
+    const student = await Students.findOne({ _id: studentID}).select('-__v');
+
+    if (student) {
+      const course = await student.courses.find((course) => course._id === courseID);
+
+      if (course) {
+        res.status(200).json({ course });
+      } else {
+        res.status(404).json({ message: 'Course not found for the given courseID' });
+      }
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+

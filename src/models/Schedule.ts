@@ -2,19 +2,19 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 /** document */
 export interface ISchedule extends Document {
-    program: string;
-    year: string;
-    semester: string;
-    block: string;
+    program: string,
+    year: string,
+    semester: string,
+    block: string,
     sched: [
       {
-        courseCode: string;
-        courseDescription: string;
-        courseUnit: string;
-        day: string;
-        time: string; 
-        room: string;
-        instructor: string;
+        courseCode: string,
+        courseDescription: string,
+        courseUnit: string,
+        day: string,
+        time: string, 
+        room: string,
+        instructor: string,
       },
     ];
   };
