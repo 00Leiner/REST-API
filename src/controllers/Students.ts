@@ -186,22 +186,26 @@ export async function readAllCourse(req: Request, res: Response) {
 export async function readCourse(req: Request, res: Response) {
   try {
     const studentID = req.params.studentID;
-    const courseID = req.params.courseID;
-    const student = await Students.findOne({ _id: studentID}).select('-__v');
+    const courseCode = req.params.courseCode;
 
-    if (student) {
-      const course = await student.courses.find((course) => course._id === courseID);
+    const student = await Students.findById(studentID);
 
-      if (course) {
-        res.status(200).json({ course });
-      } else {
-        res.status(404).json({ message: 'Course not found for the given courseID' });
-      }
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found for the given studentID' });
+    }
+
+    // Find the course based on the courseID
+    const course = student.courses.find((c) => c.code === courseCode);
+
+    if (course) {
+      return res.status(200).json({ course });
     } else {
-      res.status(404).json({ message: 'Student not found' });
+      return res.status(404).json({ message: 'Course not found for the given courseID' });
     }
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    console.error(error.message);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
 

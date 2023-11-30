@@ -7,7 +7,6 @@ export interface IStudents extends Document {
   semester: string;
   block: string;
   courses: Array<{
-    _id: string;
     code: string;
     description: string;
     units: string;
@@ -23,7 +22,6 @@ const StudentsSchema: Schema = new Schema({
   block: { type: String, required: true },
   courses: [
     {
-      _id: { type: String, required: false },
       code: { type: String, required: true },
       description: { type: String, required: true },
       units: { type: String, required: true },
