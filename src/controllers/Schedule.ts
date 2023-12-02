@@ -52,7 +52,6 @@ export async function readAllSchedule(req: Request, res: Response) {
 export async function updateSched(req: Request, res: Response) {
   try {
     const scheduleID = req.params.scheduleID;
-    console.log('Sched ID:', scheduleID);
     const schedule = await Schedule.findById(scheduleID);
 
     if (schedule) {
