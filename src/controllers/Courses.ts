@@ -36,7 +36,7 @@ export async function readCourse(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-  }  
+  };  
 
 export async function readAllCourses(req: Request, res: Response) {
     try {

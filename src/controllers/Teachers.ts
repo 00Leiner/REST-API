@@ -19,7 +19,7 @@ export async function createTeacher(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
 
 export async function readTeacher(req: Request, res: Response) {
     try {
@@ -34,7 +34,7 @@ export async function readTeacher(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-  }  
+  };  
 
 export async function readAllTeachers(req: Request, res: Response) {
     try {

@@ -22,7 +22,7 @@ export async function createSched(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
 
 export async function readSched(req: Request, res: Response) {
     try {
@@ -37,7 +37,7 @@ export async function readSched(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-  }  
+};  
 
 export async function readAllSchedule(req: Request, res: Response) {
     try {
@@ -47,7 +47,7 @@ export async function readAllSchedule(req: Request, res: Response) {
       res.status(500).json({ error }); 
       res.render('error', { error: error });
     }
-  };
+};
   
 export async function updateSched(req: Request, res: Response) {
   try {
@@ -79,7 +79,7 @@ export async function deleteSched(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-  };
+};
 
 export async function addScheduleItem(req: Request, res: Response) {
     try {
@@ -113,7 +113,7 @@ export async function addScheduleItem(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-}
+};
   
 export async function updateScheduleItem(req: Request, res: Response) {
   try {
@@ -147,7 +147,7 @@ export async function updateScheduleItem(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
   
 export async function deleteScheduleItem(req: Request, res: Response) {
   try {
@@ -171,7 +171,7 @@ export async function deleteScheduleItem(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
     }
-}
+};
 
 export async function readAllScheduleItem(req: Request, res: Response) {
   try {
@@ -186,7 +186,7 @@ export async function readAllScheduleItem(req: Request, res: Response) {
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 export async function readScheduleItem(req: Request, res: Response) {
   try {
@@ -208,6 +208,6 @@ export async function readScheduleItem(req: Request, res: Response) {
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
   

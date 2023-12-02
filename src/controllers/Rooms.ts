@@ -19,7 +19,7 @@ export async function createRoom(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
 
 export async function readRoom(req: Request, res: Response) {
     try {
@@ -34,7 +34,7 @@ export async function readRoom(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-  }  
+  };
 
 export async function readAllRooms(req: Request, res: Response) {
     try {

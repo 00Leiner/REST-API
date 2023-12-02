@@ -19,7 +19,7 @@ export async function createUser(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
 
 export async function readUser(req: Request, res: Response) {
     try {
@@ -34,7 +34,7 @@ export async function readUser(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-  }  
+  };  
 
 export async function readAllUsers(req: Request, res: Response) {
     try {

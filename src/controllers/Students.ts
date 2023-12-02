@@ -22,7 +22,7 @@ export async function createStudent(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
 
 export async function readStudent(req: Request, res: Response) {
     try {
@@ -37,7 +37,7 @@ export async function readStudent(req: Request, res: Response) {
       res.status(500).json({ error });
       res.render('error', { error: error });
     }
-  }  
+  };  
 
 export async function readAllStudents(req: Request, res: Response) {
     try {
@@ -111,7 +111,7 @@ export async function addCourse(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
 
 export async function updateCourse(req: Request, res: Response) {
   try {
@@ -142,7 +142,7 @@ export async function updateCourse(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-}
+};
 
 export async function deleteCourse(req: Request, res: Response) {
   try {
@@ -166,7 +166,7 @@ export async function deleteCourse(req: Request, res: Response) {
     res.status(500).json({ error });
     res.render('error', { error: error });
     }
-}
+};
 
 export async function readAllCourse(req: Request, res: Response) {
   try {
@@ -181,7 +181,7 @@ export async function readAllCourse(req: Request, res: Response) {
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 export async function readCourse(req: Request, res: Response) {
   try {
@@ -206,6 +206,6 @@ export async function readCourse(req: Request, res: Response) {
     console.error(error.message);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
 
 
