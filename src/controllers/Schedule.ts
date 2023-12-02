@@ -103,7 +103,6 @@ export async function addScheduleItem(req: Request, res: Response) {
         { $push: { sched: newSchedule } },
         { new: true }
       );
-      console.log('New Schedule:', newSchedule);
       if (updatedSched) {
         res.status(200).json({ sched: updatedSched });
       } else {
@@ -118,7 +117,7 @@ export async function addScheduleItem(req: Request, res: Response) {
 export async function updateScheduleItem(req: Request, res: Response) {
   try {
     const scheduleID = req.params.scheduleID;
-    const scheduleIDToUpdate = req.params.courseCodes;
+    const scheduleIDToUpdate = req.params.coursecode;
   
     const updatedScheduleData  = req.body;
   
