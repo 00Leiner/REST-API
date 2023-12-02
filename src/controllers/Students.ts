@@ -200,7 +200,7 @@ export async function readCourse(req: Request, res: Response) {
     if (course) {
       return res.status(200).json({ course });
     } else {
-      return res.status(404).json({ message: 'Course not found for the given courseID' });
+      return res.status(404).json({ message: 'Course code not exist' });
     }
   } catch (error: any) {
     console.error(error.message);
