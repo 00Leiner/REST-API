@@ -9,10 +9,10 @@ router.get('/get/:scheduleID', readSched);
 router.get('/get/', readAllSchedule);
 router.put('/update/:scheduleID', updateSched);
 router.delete('/delete/:scheduleID', deleteSched);
-router.put('/update/schedule/:scheduleID/item/:item', updateScheduleItem);
-router.delete('/delete/schedule/:scheduleID/item/:item', deleteScheduleItem);
-router.post('/add/schedule/item/:scheduleID', addScheduleItem);
-router.get('/get/schedule/:scheduleID/item', readAllScheduleItem);
-router.get('/get/schedule/:scheduleID/item/:item', readScheduleItem)
+router.put('/update/program/block/course/schedule/:scheduleID/course/code/:coursecode', updateScheduleItem);
+router.delete('/delete/program/block/course/schedule/:scheduleID/course/code/:coursecode', deleteScheduleItem);
+router.post('/add/program/block/course/schedule/:scheduleID', addScheduleItem);
+router.get('/get/program/block/schedule/:scheduleID/courses/code/', readAllScheduleItem);
+router.get('/get/program/block/schedule/:scheduleID/course/code/:coursecode', readScheduleItem)
 
 export default router;

@@ -119,7 +119,7 @@ export async function addScheduleItem(req: Request, res: Response) {
 export async function updateScheduleItem(req: Request, res: Response) {
   try {
     const scheduleID = req.params.scheduleID;
-    const scheduleIDToUpdate = req.params.item;
+    const scheduleIDToUpdate = req.params.courseCodes;
   
     const updatedScheduleData  = req.body;
   
@@ -153,12 +153,12 @@ export async function updateScheduleItem(req: Request, res: Response) {
 export async function deleteScheduleItem(req: Request, res: Response) {
   try {
     const scheduleID = req.params.scheduleID;
-    const itemID = req.params.item;
+    const schedCourseCode = req.params.coursecode;
 
     const updatedSched = await Schedule.findByIdAndUpdate(
       scheduleID,
       {
-        $pull: { sched: { _id: new Types.ObjectId(itemID) } },
+        $pull: { sched: { _id: new Types.ObjectId(schedCourseCode) } },
       },
       { new: true }
     );
@@ -192,11 +192,11 @@ export async function readAllScheduleItem(req: Request, res: Response) {
 export async function readScheduleItem(req: Request, res: Response) {
   try {
     const scheduleID = req.params.scheduleID;
-    const itemID = req.params.item;
+    const schedCourseCode = req.params.coursecode;
     const schedule = await Schedule.findOne({ _id: scheduleID}).select('-__v');
 
     if (schedule) {
-      const sched = await schedule.sched.find((sched) => sched._id === itemID);
+      const sched = await schedule.sched.find((sched) => sched.courseCode === schedCourseCode);
 
       if (sched) {
         res.status(200).json({ sched });

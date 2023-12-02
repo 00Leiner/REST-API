@@ -7,7 +7,6 @@ export interface ISchedule extends Document {
     semester: string,
     block: string,
     sched: Array<{
-        _id: string;
         courseCode: string,
         courseDescription: string,
         courseUnit: string,
@@ -26,7 +25,6 @@ const ScheduleSchema: Schema = new Schema({
     block: { type: String, required: true },
     sched: [
       {
-        _id: { type: String, required: false },
         courseCode: { type: String, required: true },
         courseDescription: { type: String, required: true },
         courseUnit: { type: String, required: true },
