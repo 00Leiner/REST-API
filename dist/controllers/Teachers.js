@@ -34,6 +34,7 @@ function createTeacher(req, res) {
     });
 }
 exports.createTeacher = createTeacher;
+;
 function readTeacher(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -50,6 +51,7 @@ function readTeacher(req, res) {
     });
 }
 exports.readTeacher = readTeacher;
+;
 function readAllTeachers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

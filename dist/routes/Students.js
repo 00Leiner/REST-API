@@ -15,5 +15,5 @@ router.put('/update/student/:studentID/course/:courseID', Students_1.updateCours
 router.delete('/delete/student/:studentID/course/:courseID', Students_1.deleteCourse);
 router.post('/add/course/:studentID', Students_1.addCourse);
 router.get('/get/student/:studentID/courses', Students_1.readAllCourse);
-router.get('/get/student/:studentID/course/:courseID', Students_1.readCourse);
+router.get('/get/student/:studentID/course/:courseCode', Students_1.readCourse);
 exports.default = router;

@@ -53,6 +53,7 @@ function readCourse(req, res) {
     });
 }
 exports.readCourse = readCourse;
+;
 function readAllCourses(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteScheduleItem = exports.updateScheduleItem = exports.addScheduleItem = exports.deleteSched = exports.updateSched = exports.readAllSchedule = exports.readSched = exports.createSched = void 0;
+exports.readScheduleItem = exports.readAllScheduleItem = exports.deleteScheduleItem = exports.updateScheduleItem = exports.addScheduleItem = exports.deleteSched = exports.updateSched = exports.readAllSchedule = exports.readSched = exports.createSched = void 0;
 const Schedule_1 = __importDefault(require("../models/Schedule"));
 const mongoose_1 = __importStar(require("mongoose"));
 function createSched(req, res) {
@@ -60,6 +60,7 @@ function createSched(req, res) {
     });
 }
 exports.createSched = createSched;
+;
 function readSched(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -76,6 +77,7 @@ function readSched(req, res) {
     });
 }
 exports.readSched = readSched;
+;
 function readAllSchedule(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -94,7 +96,6 @@ function updateSched(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const scheduleID = req.params.scheduleID;
-            console.log('Sched ID:', scheduleID);
             const schedule = yield Schedule_1.default.findById(scheduleID);
             if (schedule) {
                 schedule.set(req.body);
@@ -146,7 +147,6 @@ function addScheduleItem(req, res) {
                 instructor,
             };
             const updatedSched = yield Schedule_1.default.findByIdAndUpdate(scheduleID, { $push: { sched: newSchedule } }, { new: true });
-            console.log('New Schedule:', newSchedule);
             if (updatedSched) {
                 res.status(200).json({ sched: updatedSched });
             }
@@ -161,11 +161,12 @@ function addScheduleItem(req, res) {
     });
 }
 exports.addScheduleItem = addScheduleItem;
+;
 function updateScheduleItem(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const scheduleID = req.params.scheduleID;
-            const scheduleIDToUpdate = req.params.scheduleIDToUpdate;
+            const scheduleIDToUpdate = req.params.coursecode;
             const updatedScheduleData = req.body;
             const updatedSched = yield Schedule_1.default.findOneAndUpdate({ _id: scheduleID, 'sched._id': scheduleIDToUpdate }, {
                 $set: {
@@ -179,7 +180,7 @@ function updateScheduleItem(req, res) {
                 },
             }, { new: true });
             if (updatedSched) {
-                res.status(200).json({ sched: updatedSched });
+                res.status(200).json({ sched: updatedSched.sched });
             }
             else {
                 res.status(404).json({ message: 'Schedule or course not found' });
@@ -192,16 +193,17 @@ function updateScheduleItem(req, res) {
     });
 }
 exports.updateScheduleItem = updateScheduleItem;
+;
 function deleteScheduleItem(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const scheduleID = req.params.scheduleID;
-            const scheduleIDToDelete = req.params.scheduleIDToDelete;
+            const schedCourseCode = req.params.coursecode;
             const updatedSched = yield Schedule_1.default.findByIdAndUpdate(scheduleID, {
-                $pull: { sched: { _id: new mongoose_1.Types.ObjectId(scheduleIDToDelete) } },
+                $pull: { sched: { _id: new mongoose_1.Types.ObjectId(schedCourseCode) } },
             }, { new: true });
             if (updatedSched) {
-                res.status(200).json({ sched: updatedSched });
+                res.status(200).json({ sched: updatedSched.sched });
             }
             else {
                 res.status(404).json({ message: 'Schedule not found' });
@@ -214,3 +216,49 @@ function deleteScheduleItem(req, res) {
     });
 }
 exports.deleteScheduleItem = deleteScheduleItem;
+;
+function readAllScheduleItem(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const scheduleID = req.params.scheduleID;
+            const schedule = yield Schedule_1.default.findById(scheduleID).select('-__v');
+            if (schedule) {
+                res.status(200).json({ sched: schedule.sched });
+            }
+            else {
+                res.status(404).json({ message: 'Student not found' });
+            }
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+}
+exports.readAllScheduleItem = readAllScheduleItem;
+;
+function readScheduleItem(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const scheduleID = req.params.scheduleID;
+            const schedCourseCode = req.params.coursecode;
+            const schedule = yield Schedule_1.default.findOne({ _id: scheduleID }).select('-__v');
+            if (schedule) {
+                const sched = yield schedule.sched.find((sched) => sched.courseCode === schedCourseCode);
+                if (sched) {
+                    res.status(200).json({ sched });
+                }
+                else {
+                    res.status(404).json({ message: 'Course not found for the given courseID' });
+                }
+            }
+            else {
+                res.status(404).json({ message: 'Student not found' });
+            }
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+}
+exports.readScheduleItem = readScheduleItem;
+;

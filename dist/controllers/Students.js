@@ -60,6 +60,7 @@ function createStudent(req, res) {
     });
 }
 exports.createStudent = createStudent;
+;
 function readStudent(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -76,6 +77,7 @@ function readStudent(req, res) {
     });
 }
 exports.readStudent = readStudent;
+;
 function readAllStudents(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -157,6 +159,7 @@ function addCourse(req, res) {
     });
 }
 exports.addCourse = addCourse;
+;
 function updateCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -185,6 +188,7 @@ function updateCourse(req, res) {
     });
 }
 exports.updateCourse = updateCourse;
+;
 function deleteCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -207,6 +211,7 @@ function deleteCourse(req, res) {
     });
 }
 exports.deleteCourse = deleteCourse;
+;
 function readAllCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -225,28 +230,30 @@ function readAllCourse(req, res) {
     });
 }
 exports.readAllCourse = readAllCourse;
+;
 function readCourse(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const studentID = req.params.studentID;
-            const courseID = req.params.courseID;
-            const student = yield Students_1.default.findOne({ _id: studentID }).select('-__v');
-            if (student) {
-                const course = yield student.courses.find((course) => course._id === courseID);
-                if (course) {
-                    res.status(200).json({ course });
-                }
-                else {
-                    res.status(404).json({ message: 'Course not found for the given courseID' });
-                }
+            const courseCode = req.params.courseCode;
+            const student = yield Students_1.default.findById(studentID);
+            if (!student) {
+                return res.status(404).json({ message: 'Student not found for the given studentID' });
+            }
+            // Find the course based on the courseID
+            const course = student.courses.find((c) => c.code === courseCode);
+            if (course) {
+                return res.status(200).json({ course });
             }
             else {
-                res.status(404).json({ message: 'Student not found' });
+                return res.status(404).json({ message: 'Course code not exist' });
             }
         }
         catch (error) {
-            res.status(500).json({ error: error.message });
+            console.error(error.message);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
     });
 }
 exports.readCourse = readCourse;
+;

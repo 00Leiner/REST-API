@@ -34,6 +34,7 @@ function createRoom(req, res) {
     });
 }
 exports.createRoom = createRoom;
+;
 function readRoom(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -50,6 +51,7 @@ function readRoom(req, res) {
     });
 }
 exports.readRoom = readRoom;
+;
 function readAllRooms(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

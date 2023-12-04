@@ -34,6 +34,7 @@ function createUser(req, res) {
     });
 }
 exports.createUser = createUser;
+;
 function readUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -50,6 +51,7 @@ function readUser(req, res) {
     });
 }
 exports.readUser = readUser;
+;
 function readAllUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

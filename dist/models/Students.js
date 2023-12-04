@@ -32,7 +32,6 @@ const StudentsSchema = new mongoose_1.Schema({
     block: { type: String, required: true },
     courses: [
         {
-            _id: { type: String, required: false },
             code: { type: String, required: true },
             description: { type: String, required: true },
             units: { type: String, required: true },
