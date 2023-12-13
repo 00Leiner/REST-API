@@ -28,6 +28,13 @@ const mongoose_1 = __importStar(require("mongoose"));
 /** schema */
 const TeachersSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
-    specialized: { type: String, required: true }
+    specialized: [
+        {
+            code: { type: String, required: true },
+            description: { type: String, required: true },
+            units: { type: String, required: true },
+            type: { type: String, required: true },
+        },
+    ],
 });
 exports.default = mongoose_1.default.model('Teachers', TeachersSchema);
