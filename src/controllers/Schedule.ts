@@ -193,7 +193,6 @@ export async function deleteSched(req: Request, res: Response) {
   try {
     const optionsID = req.params.optionsID;
     const scheduleID = req.params.scheduleID;
-    const schedCourseCode = req.params.coursecode;
 
     const updatedSched = await Schedule.findByIdAndUpdate(
       optionsID,
@@ -242,7 +241,7 @@ export async function addScheduleItem(req: Request, res: Response) {
     const updatedSched = await Schedule.findByIdAndUpdate(
       scheduleID,
       { $push: { 'schedule?.programs[programIndex].sched': newSchedule } },
-      { new: true, arrayFilters: [{ 'outer._id': scheduleID }] }
+      { new: true, arrayFilters: [{ 'programs._id': scheduleID }] }
     );
     if (updatedSched) {
       res.status(200).json({ sched: updatedSched });
@@ -263,22 +262,22 @@ export async function updateScheduleItem(req: Request, res: Response) {
     const updatedScheduleData = req.body;
 
     const updatedSched = await Schedule.findOneAndUpdate(
-      { _id: scheduleID, 'programs.$[outer].sched._id': scheduleIDToUpdate },
+      { _id: scheduleID, 'schedule?.programs.$[outer].sched._id': scheduleIDToUpdate },
       {
         $set: {
-          'programs.$[outer].sched.$.courseCode':
+          'schedule?.programs.$[outer].sched.$.courseCode':
             updatedScheduleData.courseCode,
-          'programs.$[outer].sched.$.courseDescription':
+          'schedule?.programs.$[outer].sched.$.courseDescription':
             updatedScheduleData.courseDescription,
-          'programs.$[outer].sched.$.courseUnit': updatedScheduleData.courseUnit,
-          'programs.$[outer].sched.$.day': updatedScheduleData.day,
-          'programs.$[outer].sched.$.time': updatedScheduleData.time,
-          'programs.$[outer].sched.$.room': updatedScheduleData.room,
-          'programs.$[outer].sched.$.instructor':
+          'schedule?.programs.$[outer].sched.$.courseUnit': updatedScheduleData.courseUnit,
+          'schedule?.programs.$[outer].sched.$.day': updatedScheduleData.day,
+          'schedule?.programs.$[outer].sched.$.time': updatedScheduleData.time,
+          'schedule?.programs.$[outer].sched.$.room': updatedScheduleData.room,
+          'schedule?.programs.$[outer].sched.$.instructor':
             updatedScheduleData.instructor,
         },
       },
-      { new: true, arrayFilters: [{ 'outer._id': scheduleID }] }
+      { new: true, arrayFilters: [{ 'programs._id': scheduleID }] }
     );
 
     if (updatedSched) {
@@ -300,9 +299,9 @@ export async function deleteScheduleItem(req: Request, res: Response) {
     const updatedSched = await Schedule.findByIdAndUpdate(
       scheduleID,
       {
-        $pull: { 'programs.$[outer].sched': { _id: new Types.ObjectId(schedCourseCode) } },
+        $pull: { 'schedule?.programs.$[outer].sched': { _id: new Types.ObjectId(schedCourseCode) } },
       },
-      { new: true, arrayFilters: [{ 'outer._id': scheduleID }] }
+      { new: true, arrayFilters: [{ 'programs._id': scheduleID }] }
     );
 
     if (updatedSched) {
