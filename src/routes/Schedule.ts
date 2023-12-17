@@ -1,10 +1,16 @@
 import express from "express";
-import { createSched, readSched, readAllSchedule, updateSched, deleteSched, addScheduleItem, updateScheduleItem, deleteScheduleItem, readScheduleItem, readAllScheduleItem } from "../controllers/Schedule";
+import { 
+    createSched, 
+    readSched, readAllSchedule, 
+    updateSched, deleteSched, 
+    addScheduleItem, updateScheduleItem, 
+    deleteScheduleItem, readScheduleItem, 
+    readAllScheduleItem, createOptions } from "../controllers/Schedule";
 
 
 const router = express.Router();
 
-router.post('/create', createSched);
+router.post('/create', createOptions);
 router.get('/get/:scheduleID', readSched);
 router.get('/get/', readAllSchedule);
 router.put('/update/:scheduleID', updateSched);

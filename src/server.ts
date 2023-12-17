@@ -9,6 +9,7 @@ import teachers from './routes/Teachers';
 import rooms from './routes/Rooms';
 import schedule from './routes/Schedule';
 import users from './routes/Users'
+import cors from 'cors';
 
 const router = express();
 
@@ -46,21 +47,14 @@ const StartServer = () => {
     router.use(express.json());
 
     //API rules
-    router.use((req, res, next) => {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Header',
-        'Origin, X-Request-With, Content-Type, Accept, Authorization'
-      );
-      if (req.method == 'OPTIONS') {
-        res.header(
-          'Access-Control-Allow-Methods',
-          'PUT, POST, PATCH, DELETE, GET'
-        );
-        return res.status(200).json({});
-      }
-      next();
-    });
+    router.use(
+      cors({
+        origin: 'http://localhost:5000', // Adjust the origin based on your Flask app
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        credentials: true, // Include cookies in the requests
+        optionsSuccessStatus: 204, // Set the status code for successful preflight requests
+      })
+    );
 
     //routes
     router.use('/Courses', courses);

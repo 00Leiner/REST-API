@@ -16,7 +16,6 @@ export async function createOptions(req: Request, res: Response) {
     res.status(201).json({ Schedule: savedOptions });
   } catch (error) {
     res.status(500).json({ error });
-    res.render('error', { error: error });
   }
 };
 
