@@ -1,356 +1,131 @@
 import { Response, Request } from "express";
 import Schedule, { ISchedule } from "../models/Schedule";
-import mongoose, { Types } from "mongoose";
-
-export async function createOptions(req: Request, res: Response) {
-  try {
-    const { options, programs } = req.body;
-
-    const Options = new Schedule({
-      options,
-      programs,
-    });
-
-    const savedOptions = await Options.save();
-
-    res.status(201).json({ Schedule: savedOptions });
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-};
+import mongoose from 'mongoose';
 
 export async function readOptions(req: Request, res: Response) {
   try {
-    const optionsID = req.params.optionsID;
-    const options = await Schedule.findById(optionsID).select('-__v');
+    const schedules = await Schedule.find().select('-__v'); 
+    res.status(200).json({ schedules }); 
+  } catch (error) {
+    res.status(500).json({ error }); 
+    res.render('error', { error: error });
+  }
+};
 
-    options
-      ? res.status(200).json({ options })
+export async function deleteAllOptions(req: Request, res: Response){
+  try {
+    const scheduleID = req.params.scheduleID; 
+      const result = await Schedule.deleteMany({});
+      
+      return result
+        ? res.status(204).send() 
+        : res.status(404).json({ message: "Not found" });
+    } catch (error) {
+      res.status(500).json({ error });
+      res.render('error', { error: error });
+  }
+}
+
+export async function readAllPrograms(req: Request, res: Response) {
+  try {
+    const scheduleID = req.params.scheduleID;
+    const schedule = await Schedule.findById(scheduleID).select('-__v');
+      
+    schedule
+      ? res.status(200).json({ schedule }) 
       : res.status(404).json({ message: "Not found" });
+      
   } catch (error) {
     res.status(500).json({ error });
     res.render('error', { error: error });
   }
-};
+}; 
 
-export async function readAllOptions(req: Request, res: Response) {
+export async function readProgram(req: Request, res: Response) {
   try {
-    const options = await Schedule.find().select('-__v');
-    res.status(200).json({ options });
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-};
+    const scheduleID = req.params.scheduleID;
+    const programID = req.params.programID as string; // Assuming you have a programID parameter
 
-export async function updateOptions(req: Request, res: Response) {
-  try {
-    const optionsID = req.params.optionsID;
-    const options = await Schedule.findById(optionsID);
+    // Using findById to retrieve a specific schedule by ID
+    const schedule = await Schedule.findById(scheduleID);
 
-    if (options) {
-      options.set(req.body);
-      const updatedOptions = await options.save();
-      return res.status(200).json({ Schedules: updatedOptions });
-    } else {
-      return res.status(404).json({ message: "Not found" });
+    if (!schedule) {
+      return res.status(404).json({ message: 'Schedule not found' });
     }
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-};
 
-export async function deleteOptions(req: Request, res: Response) {
-  try {
-    const optionsID = req.params.optionsID;
-    const result = await Schedule.findByIdAndDelete(optionsID);
+    // Find the specific program within the programs array
+    const program = schedule.programs.find((p) => p._id.toString() === programID);
 
-    return result
-      ? res.status(204).send()
-      : res.status(404).json({ message: "Not found" });
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-};
-
-export async function createSched(req: Request, res: Response) {
-  try {
-    const optionsID = req.params.optionsID;
-
-    const { program, year, semester, block, sched } = req.body;
-
-    const schedule = new Schedule({
-      _id: new mongoose.Types.ObjectId(),
-      program,
-      year,
-      semester,
-      block,
-      sched,
-    });
-
-    const savedSched = await Schedule.findByIdAndUpdate(
-      optionsID,
-      { $push: { 'schedule?.programs': schedule } },
-      { new: true, arrayFilters: [{ 'programs._id': optionsID }] }
-    );
-    if (savedSched) {
-      res.status(200).json({ programs: savedSched });
-    } else {
-      res.status(404).json({ message: 'Schedule not found' });
+    if (!program) {
+      return res.status(404).json({ message: 'Program not found' });
     }
+
+    res.status(200).json({ program });
   } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+export async function readAllSched(req: Request, res: Response) {
+  try {
+    const scheduleID = req.params.scheduleID;
+    const programID = req.params.programID; // Assuming you have a unique identifier for programs
+
+    // Using findById to retrieve a specific schedule by ID
+    const schedule = await Schedule.findById(scheduleID);
+
+    if (!schedule) {
+      return res.status(404).json({ message: 'Schedule not found' });
+    }
+
+    // Find the program within the programs array based on a unique identifier (e.g., programID)
+    const program = schedule.programs.find(program => program._id === programID);
+
+    if (!program) {
+      return res.status(404).json({ message: 'Program not found' });
+    }
+
+    // Extract the sched array from the found program
+    const schedArray = program.sched;
+
+    res.status(200).json({ schedArray });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
 export async function readSched(req: Request, res: Response) {
   try {
-    const optionsID = req.params.optionsID;
-    const scheduleProgram = req.params.scheduleProgram;
-    const scheduleYear = req.params.scheduleYear;
-    const scheduleSemester = req.params.scheduleSemester;
-    const scheduleBlock = req.params.scheduleBlock;
-    const schedule = await Schedule.findOne({ _id: optionsID }).select('-__v');
-
-    if (schedule) {
-      const programs = schedule.programs.filter((program) => {
-        return (
-          program.program === scheduleProgram &&
-          program.year === scheduleYear &&
-          program.semester === scheduleSemester &&
-          program.block === scheduleBlock
-        );
-      });
-
-      if (programs) {
-        res.status(200).json({ programs });
-      } else {
-        res
-          .status(404)
-          .json({ message: 'Course not found for the given courseID' });
-      }
-    } else {
-      res.status(404).json({ message: 'Student not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-export async function readAllSchedule(req: Request, res: Response) {
-  try {
-    const optionsID = req.params.optionsID;
-    const options = await Schedule.findById(optionsID).select('-__v');
-
-    if (options) {
-      res.status(200).json({ programs: options.programs[0].sched });
-    } else {
-      res.status(404).json({ message: 'Options not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-export async function updateSched(req: Request, res: Response) {
-  try {
-    const optionsID = req.params.optionsID;
     const scheduleID = req.params.scheduleID;
+    const programID = req.params.programID; // Assuming you have a unique identifier for programs
+    const schedID = req.params.schedID; // Assuming you have a unique identifier for sched within a program
 
-    const updatedOptionsData = req.body;
+    // Using findById to retrieve a specific schedule by ID
+    const schedule = await Schedule.findById(scheduleID);
 
-    const updatedOption = await Schedule.findOneAndUpdate(
-      { _id: optionsID, 'schedule?.programs._id': scheduleID },
-      {
-        $set: {
-          'schedule?.programs.program':
-          updatedOptionsData.program,
-          'schedule?.programs.year':
-          updatedOptionsData.year,
-          'schedule?.programs.semester': updatedOptionsData.semester,
-          'schedule?.programs.block': updatedOptionsData.block
-        },
-      },
-      { new: true, arrayFilters: [{ 'programs._id': scheduleID }] }
-    );
-
-    if (updatedOption) {
-      res.status(200).json({ programs: updatedOption.programs });
-    } else {
-      res.status(404).json({ message: 'Schedule or course not found' });
+    if (!schedule) {
+      return res.status(404).json({ message: 'Schedule not found' });
     }
+
+    // Find the program within the programs array based on a unique identifier (e.g., programID)
+    const program = schedule.programs.find((program) => program._id.toString() === programID);
+
+    if (!program) {
+      return res.status(404).json({ message: 'Program not found' });
+    }
+
+    // Find the specific sched within the sched array of the program
+    const sched = program.sched.find((sched) => sched._id.toString() === schedID);
+
+    if (!sched) {
+      return res.status(404).json({ message: 'Specific sched not found' });
+    }
+
+    res.status(200).json({ sched });
   } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-}
-
-export async function deleteSched(req: Request, res: Response) {
-  try {
-    const optionsID = req.params.optionsID;
-    const scheduleID = req.params.scheduleID;
-
-    const updatedSched = await Schedule.findByIdAndUpdate(
-      optionsID,
-      {
-        $pull: { 'SChedule.programs': { _id: new Types.ObjectId(scheduleID) } },
-      },
-      { new: true, arrayFilters: [{ 'outer._id': optionsID }] }
-    );
-
-    if (updatedSched) {
-      res.status(200).json({ programs: updatedSched.programs });
-    } else {
-      res.status(404).json({ message: 'Schedule not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-}
-
-export async function addScheduleItem(req: Request, res: Response) {
-  try {
-    const scheduleID = req.params.scheduleID;
-
-    const {
-      courseCode,
-      courseDescription,
-      courseUnit,
-      day,
-      time,
-      room,
-      instructor,
-    } = req.body;
-
-    const newSchedule = {
-      _id: new Types.ObjectId(),
-      courseCode,
-      courseDescription,
-      courseUnit,
-      day,
-      time,
-      room,
-      instructor,
-    };
-
-    const updatedSched = await Schedule.findByIdAndUpdate(
-      scheduleID,
-      { $push: { 'schedule?.programs[programIndex].sched': newSchedule } },
-      { new: true, arrayFilters: [{ 'programs._id': scheduleID }] }
-    );
-    if (updatedSched) {
-      res.status(200).json({ sched: updatedSched });
-    } else {
-      res.status(404).json({ message: 'Schedule not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-}
-
-export async function updateScheduleItem(req: Request, res: Response) {
-  try {
-    const scheduleID = req.params.scheduleID;
-    const scheduleIDToUpdate = req.params.coursecode;
-
-    const updatedScheduleData = req.body;
-
-    const updatedSched = await Schedule.findOneAndUpdate(
-      { _id: scheduleID, 'schedule?.programs.$[outer].sched._id': scheduleIDToUpdate },
-      {
-        $set: {
-          'schedule?.programs.$[outer].sched.$.courseCode':
-            updatedScheduleData.courseCode,
-          'schedule?.programs.$[outer].sched.$.courseDescription':
-            updatedScheduleData.courseDescription,
-          'schedule?.programs.$[outer].sched.$.courseUnit': updatedScheduleData.courseUnit,
-          'schedule?.programs.$[outer].sched.$.day': updatedScheduleData.day,
-          'schedule?.programs.$[outer].sched.$.time': updatedScheduleData.time,
-          'schedule?.programs.$[outer].sched.$.room': updatedScheduleData.room,
-          'schedule?.programs.$[outer].sched.$.instructor':
-            updatedScheduleData.instructor,
-        },
-      },
-      { new: true, arrayFilters: [{ 'programs._id': scheduleID }] }
-    );
-
-    if (updatedSched) {
-      res.status(200).json({ sched: updatedSched.programs[0].sched });
-    } else {
-      res.status(404).json({ message: 'Schedule or course not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-}
-
-export async function deleteScheduleItem(req: Request, res: Response) {
-  try {
-    const scheduleID = req.params.scheduleID;
-    const schedCourseCode = req.params.coursecode;
-
-    const updatedSched = await Schedule.findByIdAndUpdate(
-      scheduleID,
-      {
-        $pull: { 'schedule?.programs.$[outer].sched': { _id: new Types.ObjectId(schedCourseCode) } },
-      },
-      { new: true, arrayFilters: [{ 'programs._id': scheduleID }] }
-    );
-
-    if (updatedSched) {
-      res.status(200).json({ sched: updatedSched.programs[0].sched });
-    } else {
-      res.status(404).json({ message: 'Schedule not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
-}
-
-export async function readAllScheduleItem(req: Request, res: Response) {
-  try {
-    const scheduleID = req.params.scheduleID;
-    const schedule = await Schedule.findById(scheduleID).select('-__v');
-
-    if (schedule) {
-      res.status(200).json({ sched: schedule.programs[0].sched });
-    } else {
-      res.status(404).json({ message: 'Student not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-export async function readScheduleItem(req: Request, res: Response) {
-  try {
-    const scheduleID = req.params.scheduleID;
-    const schedCourseCode = req.params.coursecode;
-    const schedule = await Schedule.findOne({ _id: scheduleID }).select('-__v');
-
-    if (schedule) {
-      const sched = await schedule.programs[0].sched.find(
-        (sched) => sched.courseCode === schedCourseCode
-      );
-
-      if (sched) {
-        res.status(200).json({ sched });
-      } else {
-        res
-          .status(404)
-          .json({ message: 'Course not found for the given courseID' });
-      }
-    } else {
-      res.status(404).json({ message: 'Student not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
