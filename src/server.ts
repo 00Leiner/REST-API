@@ -49,7 +49,7 @@ const StartServer = () => {
     //API rules
     router.use(
       cors({
-        origin: 'http://localhost:5000', // Adjust the origin based on your Flask app
+        origin: 'http://3.27.192.58:5000', // Adjust the origin based on your Flask app
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true, // Include cookies in the requests
         optionsSuccessStatus: 204, // Set the status code for successful preflight requests
