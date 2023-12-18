@@ -1,10 +1,11 @@
 import express from "express";
 import { 
-    readAllPrograms, readOptions, deleteAllOptions, readProgram, readSched, readAllSched } from "../controllers/Schedule";
+    readAllPrograms, readOptions, deleteAllOptions, readProgram, readSched, readAllSched, createSchedule } from "../controllers/Schedule";
 
 
 const router = express.Router();
 
+router.post('/create', createSchedule)
 router.get('/get/', readOptions);
 router.delete('/delete/all', deleteAllOptions)
 router.get('/get/:scheduleID', readAllPrograms);

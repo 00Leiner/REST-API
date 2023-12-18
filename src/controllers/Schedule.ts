@@ -2,6 +2,26 @@ import { Response, Request } from "express";
 import Schedule, { ISchedule } from "../models/Schedule";
 import mongoose from 'mongoose';
 
+export async function createSchedule(req: Request, res: Response) {
+  try {
+    const { options, programs } = req.body;
+    
+    const schedule = new Schedule({
+      _id: new mongoose.Types.ObjectId(),
+      options,
+      programs
+    });
+
+    const savedSchedule = await schedule.save();
+
+    res.status(201).json({ schedule: savedSchedule });
+  } catch (error) {
+    res.status(500).json({ error });
+    res.render('error', { error: error });
+  }
+};
+
+
 export async function readOptions(req: Request, res: Response) {
   try {
     const schedules = await Schedule.find().select('-__v'); 
