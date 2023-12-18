@@ -1,14 +1,15 @@
 import express from "express";
 import { 
-    readAllPrograms, readOptions, deleteAllOptions, readProgram, readSched } from "../controllers/Schedule";
+    readAllPrograms, readOptions, deleteAllOptions, readProgram, readSched, readAllSched } from "../controllers/Schedule";
 
 
 const router = express.Router();
 
-router.get('/get/:scheduleID', readAllPrograms);
 router.get('/get/', readOptions);
 router.delete('/delete/all', deleteAllOptions)
+router.get('/get/:scheduleID', readAllPrograms);
 router.get('/get/:scheduleID/:programID', readProgram);
-router.get('/get/:scheduleID/:programID/:schedID', readSched);
+router.get('/getSched/:scheduleID/:programID', readAllSched);
+router.get('/getSched/:scheduleID/:programID/:schedID', readSched);
 
 export default router;
