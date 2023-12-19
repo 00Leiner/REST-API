@@ -1,13 +1,12 @@
 import { Response, Request } from "express";
 import Schedule from "../models/Schedule";
-import Schdl from "../models/Schedule_Create";
 import mongoose from 'mongoose';
 
 export async function createSchedule(req: Request, res: Response) {
   try {
     const { options, programs } = req.body;
     
-    const schedule = new Schdl({
+    const schedule = new Schedule({
       _id: new mongoose.Types.ObjectId(),
       options,
       programs
@@ -107,7 +106,7 @@ export async function readAllSched(req: Request, res: Response) {
     }
 
     // Extract the sched array from the found program
-    const schedArray = program.sched;
+    const schedArray = program;
 
     res.status(200).json({ schedArray });
   } catch (error) {
