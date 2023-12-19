@@ -47,22 +47,25 @@ export async function readAllTeachers(req: Request, res: Response) {
   };
   
 export async function updateTeacher(req: Request, res: Response) {
-  try {
-    const teacherID = req.params.teacherID;
-    console.log('Teacher ID:', teacherID);
-    const teacher = await Teachers.findById(teacherID);
-
-    if (teacher) {
-      teacher.set(req.body);
-      const updatedTeacher = await teacher.save();
-      return res.status(200).json({ teachers: updatedTeacher });
-    } else {
-      return res.status(404).json({ message: "Not found" });
+    try {
+      const teacherID = req.params.teacherID;
+      console.log('Teacher ID:', teacherID);
+  
+      const updatedTeacher = await Teachers.findOneAndUpdate(
+        { _id: teacherID },
+        req.body,
+        { new: true, runValidators: true }
+      );
+  
+      if (updatedTeacher) {
+        return res.status(200).json({ teachers: updatedTeacher });
+      } else {
+        return res.status(404).json({ message: "Not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ error });
+      res.render('error', { error: error });
     }
-  } catch (error) {
-    res.status(500).json({ error });
-    res.render('error', { error: error });
-  }
 };
 
 export async function deleteTeacher(req: Request, res: Response) {
