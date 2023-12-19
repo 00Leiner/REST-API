@@ -1,12 +1,13 @@
 import { Response, Request } from "express";
-import Schedule, { ISchedule } from "../models/Schedule";
+import Schedule from "../models/Schedule";
+import Schdl from "../models/Schedule_Create";
 import mongoose from 'mongoose';
 
 export async function createSchedule(req: Request, res: Response) {
   try {
     const { options, programs } = req.body;
     
-    const schedule = new Schedule({
+    const schedule = new Schdl({
       _id: new mongoose.Types.ObjectId(),
       options,
       programs
@@ -34,7 +35,6 @@ export async function readOptions(req: Request, res: Response) {
 
 export async function deleteAllOptions(req: Request, res: Response){
   try {
-    const scheduleID = req.params.scheduleID; 
       const result = await Schedule.deleteMany({});
       
       return result
@@ -64,7 +64,7 @@ export async function readAllPrograms(req: Request, res: Response) {
 export async function readProgram(req: Request, res: Response) {
   try {
     const scheduleID = req.params.scheduleID;
-    const programID = req.params.programID as string; // Assuming you have a programID parameter
+    const programID = req.params.programID; // Assuming you have a programID parameter
 
     // Using findById to retrieve a specific schedule by ID
     const schedule = await Schedule.findById(scheduleID);
