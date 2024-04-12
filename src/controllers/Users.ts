@@ -97,3 +97,4 @@ export async function readUsernamePassword(req: Request, res: Response) {
   // If user exists and credentials match, return success message
   return res.status(200).json({ message: 'Login successful', user });
 };
+

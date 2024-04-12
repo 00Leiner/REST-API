@@ -10,6 +10,7 @@ import rooms from './routes/Rooms';
 import schedule from './routes/Schedule';
 import users from './routes/Users'
 import cors from 'cors';
+import Curriculums from './routes/Curriculums';
 
 const router = express();
 
@@ -63,6 +64,7 @@ const StartServer = () => {
     router.use('/Rooms', rooms);
     router.use('/Schedule', schedule);
     router.use('/Users', users);
+    router.use('/Curriculums', Curriculums);
 
 
     //error handling
