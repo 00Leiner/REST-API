@@ -8,6 +8,7 @@ export interface ISchedule extends Document {
       program: string,
       year: string,
       semester: string,
+      major: string,
       block: string,
       sched: Array<{
           _id: string;
@@ -30,6 +31,7 @@ export interface ISchedule extends Document {
     program: { type: String, required: true },
     year: { type: String, required: true },
     semester: { type: String, required: true },
+    major: { type: String, required: true },
     block: { type: String, required: true },
     sched: [
       {

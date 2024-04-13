@@ -4,13 +4,14 @@ import mongoose, { Types } from "mongoose";
 
 export async function createCurriculum(req: Request, res: Response) {
   try {
-    const { program, year, semester, curriculum } = req.body;
+    const { program, year, semester, major, curriculum } = req.body;
     
     const newCurriculum = new Curriculums({
       _id: new mongoose.Types.ObjectId(),
       program, 
       year, 
       semester, 
+      major,
       curriculum
     });
 

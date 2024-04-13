@@ -5,6 +5,7 @@ export interface ICurriculums extends Document {
     program: string,
     year: string,
     semester: string,
+    major: string,
     curriculum: Array<{
       code: string;
       description: string;
@@ -18,6 +19,7 @@ const CurriculumsSchema: Schema = new Schema({
     program: { type: String, required: true },
     year: { type: String, required: true },
     semester: { type: String, required: true },
+    major: { type: String, required: true },
     curriculum: [
       {
         code: { type: String, required: true },

@@ -5,6 +5,7 @@ export interface IStudents extends Document {
   program: string;
   year: string;
   semester: string;
+  major: string;
   block: string;
   courses: Array<{
     code: string;
@@ -19,6 +20,7 @@ const StudentsSchema: Schema = new Schema({
   program: { type: String, required: true },
   year: { type: String, required: true },
   semester: { type: String, required: true },
+  major: { type: String, required: true },
   block: { type: String, required: true },
   courses: [
     {

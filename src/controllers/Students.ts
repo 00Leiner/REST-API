@@ -4,13 +4,14 @@ import mongoose, { Types } from "mongoose";
 
 export async function createStudent(req: Request, res: Response) {
   try {
-    const { program, year, semester, block, courses } = req.body;
+    const { program, year, semester, major, block, courses } = req.body;
     
     const student = new Students({
       _id: new mongoose.Types.ObjectId(),
       program,
       year,
       semester,
+      major,
       block,
       courses,
     });
