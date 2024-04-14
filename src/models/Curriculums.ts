@@ -3,9 +3,9 @@ import mongoose, { Document, Schema } from 'mongoose';
 /** document */
 export interface ICurriculums extends Document {
     program: string,
+    major: string,
     year: string,
     semester: string,
-    major: string,
     curriculum: Array<{
       code: string;
       description: string;
@@ -17,9 +17,9 @@ export interface ICurriculums extends Document {
  /** schema */
 const CurriculumsSchema: Schema = new Schema({
     program: { type: String, required: true },
+    major: { type: String, required: true },
     year: { type: String, required: true },
     semester: { type: String, required: true },
-    major: { type: String, required: true },
     curriculum: [
       {
         code: { type: String, required: true },

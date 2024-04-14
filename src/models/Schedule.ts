@@ -6,9 +6,9 @@ export interface ISchedule extends Document {
     programs: Array<{
       _id: string;
       program: string,
+      major: string,
       year: string,
       semester: string,
-      major: string,
       block: string,
       sched: Array<{
           _id: string;
@@ -29,9 +29,9 @@ export interface ISchedule extends Document {
   programs: [{
     _id: { type: Schema.Types.ObjectId, auto: true }, // Specify Schema.Types.ObjectId for automatic generation
     program: { type: String, required: true },
+    major: { type: String, required: true },
     year: { type: String, required: true },
     semester: { type: String, required: true },
-    major: { type: String, required: true },
     block: { type: String, required: true },
     sched: [
       {
